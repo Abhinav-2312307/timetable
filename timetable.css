@@ -1,0 +1,75 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide scrollbars */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background */
+}
+
+#smoke-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Smoke effect is behind the content */
+}
+
+.content {
+    z-index: 1;
+    position: relative;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: rgba(255, 255, 255, 0.1); /* Slight transparency */
+    border-radius: 12px;
+    overflow: hidden;
+    color: #fff; /* White text */
+}
+
+thead th {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+tbody td {
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #444;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+tbody td[colspan="2"] {
+    background-color: rgba(100, 100, 100, 0.2);
+}
+
+tbody tr:nth-child(even) td {
+    background-color: rgba(50, 50, 50, 0.4);
+}
+
+tbody tr:nth-child(odd) td {
+    background-color: rgba(30, 30, 30, 0.6);
+}
+
+tbody td:hover {
+    background-color: #3a6f75;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+sup {
+    font-size: smaller;
+}

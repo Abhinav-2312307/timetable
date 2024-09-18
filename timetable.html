@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable with Swirl Cursor and Smoke Effect</title>
+    <style>
+        /* Base Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide scrollbars */
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e; /* Dark background for the webpage */
+        }
+
+        #smoke-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Smoke effect is behind the content */
+        }
+
+        .content {
+            z-index: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        /* Timetable Styles */
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.8); /* Keep table background light */
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            color: #333; /* Dark text for contrast */
+        }
+
+        thead th {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+
+        tbody td {
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #444;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        tbody td[colspan="2"] {
+            background-color: rgba(100, 100, 100, 0.1); /* Slight transparency for larger cells */
+        }
+
+        tbody tr:nth-child(even) td {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        tbody tr:nth-child(odd) td {
+            background-color: rgba(240, 240, 240, 0.7);
+        }
+
+        tbody td:hover {
+            background-color: #3a6f75;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        sup {
+            font-size: smaller;
+        }
+
+        /* Swirl Cursor Effect */
+        .trail {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: swirl-animation 1s linear infinite;
+        }
+
+        /* Animation for the swirl effect */
+        @keyframes swirl-animation {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Rainbow colors */
+        .trail:nth-child(1) { background-color: #ff0000; }
+        .trail:nth-child(2) { background-color: #ff7f00; }
+        .trail:nth-child(3) { background-color: #ffff00; }
+        .trail:nth-child(4) { background-color: #00ff00; }
+        .trail:nth-child(5) { background-color: #0000ff; }
+        .trail:nth-child(6) { background-color: #4b0082; }
+        .trail:nth-child(7) { background-color: #8f00ff; }
+    </style>
+</head>
+<body>
+    <!-- Smoke container and canvas for smoke effect -->
+    <div id="smoke-container">
+        <canvas id="smoke"></canvas>
+    </div>
+
+    <!-- Timetable Content -->
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Day/ Lecture</th>
+                    <th>1<sup>st</sup><br>9:05-9:55</th>
+                    <th>2<sup>nd</sup><br>9:55-10:45</th>
+                    <th>3<sup>rd</sup><br>10:55-11:45</th>
+                    <th>4<sup>th</sup><br>11:45-12:35</th>
+                    <th>5<sup>th</sup><br>13:25-14:15</th>
+                    <th>6<sup>th</sup><br>14:15-15:05</th>
+                    <th>7<sup>th</sup><br>15:15-16:05</th>
+                    <th>8<sup>th</sup><br>16:05-16:55</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monday</td>
+                    <td colspan="2">[ Nikhil Anand ]<br>[ VT-301 ]<br>[ L-11 ]</td>
+                    <td colspan="2">[ Komal Gupta ]<br>[ InfyTQ-Python-3 ]<br>[ K-33 ]</td>
+                    <td>[ Nand Kishore Sharma ]<br>[ BCS-301 ]<br>[ L-11 ]</td>
+                    <td>[ Raghaw Shukla ]<br>[ BAS-303 ]<br>[ L-11 ]</td>
+                    <td colspan="2">[ Raj Kumar Yadav ]<br>[ BCC-351 ]<br>[ D-21-22 ]</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td colspan="2">[ Rajesh Kumar Pandey ]<br>[ WS-3 ]<br>[ N-14 ]</td>
+                    <td colspan="2">[ Himanshu Kumar Dwivedi ]<br>[ TT-HT-3 ]<br>[ K-24 ]</td>
+                    <td>[ Raghaw Shukla ]<br>[ BAS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Anshul Atre ]<br>[ BCS-302 ]<br>[ L-11 ]</td>
+                    <td colspan="2">[ Kumari Srishti ]<br>[ TT-H-3 ]<br>[ C-22-23 ]</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td colspan="2">[ Komal Gupta ]<br>[ InfyTQ-Python-3 ]<br>[ K-33 ]</td>
+                    <td>[ Raghaw Shukla ]<br>[ BAS-303 ]<br>[ B-32 ]</td>
+                    <td>[ Chhavi Mishra Jha ]<br>[ TT-OLT-301 ]<br>[ D-23-24 ]</td>
+                    <td>[ Kumari Srishti ]<br>[ TT-H-3 ]<br>[ L-11 ]</td>
+                    <td>[ Amit Tiwari ]<br>[ BCS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Raj Kumar Yadav ]<br>[ BCC-351 ]<br>[ L-11 ]</td>
+                    <td>[ Amit Tiwari ]<br>[ BCS-303 ]<br>[ L-11 ]</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td colspan="2">[ Raghuram ]<br>[ VT-301 ]<br>[ L-11 ]</td>
+                    <td colspan="2">[ Vishwank Vikram Singh ]<br>[ TT-H-3 ]<br>[ D-23-24 ]</td>
+                    <td>[ Raghaw Shukla ]<br>[ BAS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Amit Tiwari ]<br>[ BCS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Raj Kumar Yadav ]<br>[ BCC-351 ]<br>[ L-11 ]</td>
+                    <td>[ Amit Tiwari ]<br>[ BCS-303 ]<br>[ L-11 ]</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td colspan="2">[ Nand Kishore Sharma ]<br>[ BCS-351 ]<br>[ D-21-22 ]</td>
+                    <td colspan="2">[ Himanshu Kumar Dwivedi ]<br>[ TT-HD-3 ]<br>[ K-24 ]</td>
+                    <td>[ Raghaw Shukla ]<br>[ BAS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Amit Tiwari ]<br>[ BCS-303 ]<br>[ L-11 ]</td>
+                    <td>[ Anshul Atre ]<br>[ BCS-302 ]<br>[ L-11 ]</td>
+                    <td>[ Komal Gupta ]<br>[ TT-OLT-D-301 ]<br>[ L-11 ]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- JavaScript for Smoke Effect and Swirl Cursor -->
+    <script>
+        // Smoke Effect Code (same as previous)
+        const canvas = document.getElementById('smoke');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+
+        const mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height / 80) * (canvas.height / 80)
+        };
+
+        window.addEventListener('mousemove', function (event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = 'rgba(255,255,255,0.05)';
+                ctx.fill();
+            }
+
+            update() {
+                if (this.x + this.size > canvas.width || this.x - this.size < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y + this.size > canvas.height || this.y - this.size < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                this.x += this.directionX;
+                this.y += this.directionY;
+
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouse.radius + this.size) {
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                        this.x += 10;
+                    }
+                    if (mouse.x > this.x && this.x > this.size * 10) {
+                        this.x -= 10;
+                    }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                        this.y += 10;
+                    }
+                    if (mouse.y > this.y && this.y > this.size * 10) {
+                        this.y -= 10;
+                    }
+                }
+
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = Math.random() * 3 + 1;
+                let x = Math.random() * (window.innerWidth - size * 2);
+                let y = Math.random() * (window.innerHeight - size * 2);
+                let directionX = (Math.random() * 2) - 1;
+                let directionY = (Math.random() * 2) - 1;
+                let color = 'rgba(255, 255, 255, 0.1)';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', function() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            mouse.radius = ((canvas.height / 80) * (canvas.height / 80));
+            init();
+        });
+
+        // Swirl Cursor Effect
+        const trails = [];
+        const numTrails = 7; // Number of rainbow trails
+
+        window.addEventListener('mousemove', (e) => {
+            const trailDiv = document.createElement('div');
+            trailDiv.className = 'trail';
+            trailDiv.style.left = `${e.clientX}px`;
+            trailDiv.style.top = `${e.clientY}px`;
+            document.body.appendChild(trailDiv);
+            trails.push(trailDiv);
+
+            // Remove the trail after some time to prevent DOM overload
+            setTimeout(() => {
+                trailDiv.remove();
+                trails.shift();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
